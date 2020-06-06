@@ -20,6 +20,23 @@ class Application(Frame):
         self.save_as_button["text"] = "Save As"
         self.save_as_button["command"] = self.save_as
         self.save_as_button.pack()
+
+        Label(self, text="Number of white spaces: ").pack(side = LEFT)
+        self.spaces = Entry(self, width = 10)
+        self.spaces.pack(side = LEFT)
+        self.space_count = IntVar()
+        self.space_count.set(1)
+        self.spaces["textvariable"] = self.space_count
+        self.spaces.bind("<Return>", self.space_count)
+
+        Label(self, text="Number of columns: ").pack(side = LEFT)
+        self.columns = Entry(self, width = 10)
+        self.columns.pack(side = LEFT)
+        self.columns_count = IntVar()
+        self.columns_count.set(72)
+        self.columns["textvariable"] = self.columns_count
+        self.columns.bind("<Return>", self.columns_count)
+
         self.edit = scrolledtext.ScrolledText(self.master, width = 100)
         self.edit.pack(fill = BOTH, expand = True)
         self.text = "use open button to open a file in hex"
@@ -31,7 +48,7 @@ class Application(Frame):
         if name != "":
             self.file = name
             try:
-                os.system(f'xxd -g1 {self.file} {self.file}_temp.txt')
+                os.system(f'xxd -g{self.space_count} -cols{self.columns_count} {self.file} {self.file}_temp.txt')
                 with open(f'{self.file}_temp.txt') as f:
                     text = f.read()
                     self.edit.delete(1.0, END)
